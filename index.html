@@ -5,6 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSVP Speed Reader</title>
     <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --container-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #7f8c8d;
+            --text-tertiary: #95a5a6;
+            --accent-color: #667eea;
+            --accent-hover: #5568d3;
+            --border-color: #e0e0e0;
+            --display-bg: #f8f9fa;
+            --input-bg: #ffffff;
+            --control-bg: #f8f9fa;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --button-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --container-bg: #0f1419;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --text-tertiary: #808080;
+            --accent-color: #7b68ee;
+            --accent-hover: #9370db;
+            --border-color: #2a2a3e;
+            --display-bg: #1a1a2e;
+            --input-bg: #1a1a2e;
+            --control-bg: #1a1a2e;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --button-shadow: rgba(0, 0, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,29 +47,62 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            color: #333;
+            color: var(--text-primary);
+            transition: background 0.3s ease;
         }
 
         .container {
-            background: white;
+            background: var(--container-bg);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px var(--shadow-color);
             padding: 40px;
             max-width: 900px;
             width: 100%;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
         h1 {
             text-align: center;
-            color: #667eea;
-            margin-bottom: 30px;
+            color: var(--accent-color);
             font-size: 2.5em;
+            flex: 1;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px var(--button-shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: 0 6px 12px var(--button-shadow);
         }
 
         .input-section {
@@ -46,17 +113,19 @@
             width: 100%;
             min-height: 150px;
             padding: 15px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             font-size: 16px;
             font-family: inherit;
             resize: vertical;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, background 0.3s, color 0.3s;
+            background: var(--input-bg);
+            color: var(--text-primary);
         }
 
         textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent-color);
         }
 
         .file-upload {
@@ -71,8 +140,8 @@
         }
 
         .rsvp-display {
-            background: #f8f9fa;
-            border: 3px solid #667eea;
+            background: var(--display-bg);
+            border: 3px solid var(--accent-color);
             border-radius: 15px;
             height: 200px;
             display: flex;
@@ -81,15 +150,17 @@
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .word-container {
             font-size: 48px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-primary);
             text-align: center;
             font-family: 'Courier New', monospace;
             letter-spacing: 2px;
+            transition: color 0.3s ease;
         }
 
         .word-container .focus-letter {
@@ -102,7 +173,7 @@
             bottom: 0;
             left: 0;
             height: 5px;
-            background: #667eea;
+            background: var(--accent-color);
             width: 0%;
             transition: width 0.1s linear;
         }
@@ -124,12 +195,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px var(--button-shadow);
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 6px 12px var(--button-shadow);
         }
 
         button:active {
@@ -137,12 +208,12 @@
         }
 
         .btn-primary {
-            background: #667eea;
+            background: var(--accent-color);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #5568d3;
+            background: var(--accent-hover);
         }
 
         .btn-secondary {
@@ -167,14 +238,15 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #f8f9fa;
+            background: var(--control-bg);
             padding: 10px 20px;
             border-radius: 8px;
+            transition: background 0.3s ease;
         }
 
         .speed-control label {
             font-weight: 600;
-            color: #667eea;
+            color: var(--accent-color);
         }
 
         .speed-control input[type="range"] {
@@ -183,23 +255,26 @@
 
         .speed-value {
             font-weight: bold;
-            color: #333;
+            color: var(--text-primary);
             min-width: 80px;
+            transition: color 0.3s ease;
         }
 
         .stats {
             text-align: center;
-            color: #7f8c8d;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-top: 20px;
+            transition: color 0.3s ease;
         }
 
         .info-text {
             text-align: center;
-            color: #95a5a6;
+            color: var(--text-tertiary);
             font-size: 14px;
             margin-top: 10px;
             font-style: italic;
+            transition: color 0.3s ease;
         }
 
         @media (max-width: 600px) {
@@ -227,6 +302,10 @@
 </head>
 <body>
     <div class="container">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+            🌙
+        </button>
+
         <h1>📖 RSVP Speed Reader</h1>
 
         <div class="input-section">
@@ -415,6 +494,28 @@
             stats.textContent = `Words: ${words.length} | Position: ${currentIndex} of ${words.length}`;
         }
 
+        // Theme Management
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update toggle button icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+
+            // Update toggle button icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if (e.code === 'Space') {
@@ -422,10 +523,14 @@
                 togglePlayPause();
             } else if (e.code === 'Escape') {
                 reset();
+            } else if (e.code === 'KeyD' && e.ctrlKey) {
+                e.preventDefault();
+                toggleTheme();
             }
         });
 
         // Initialize
+        loadTheme();
         updateStats();
     </script>
 </body>
