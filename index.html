@@ -313,6 +313,7 @@
             <div class="file-upload">
                 <input type="file" id="fileInput" accept=".txt">
                 <button class="btn-success" onclick="loadText()">Load Text</button>
+                <button class="btn-secondary" onclick="clearText()">Clear</button>
             </div>
         </div>
 
@@ -372,6 +373,28 @@
             } else {
                 alert('Please enter some text first!');
             }
+        }
+
+        function clearText() {
+            // Stop playback if currently playing
+            stop();
+
+            // Clear textarea
+            textInput.value = '';
+
+            // Clear file input
+            fileInput.value = '';
+
+            // Reset word array
+            words = [];
+            currentIndex = 0;
+
+            // Reset display
+            wordDisplay.innerHTML = 'Ready';
+            progressBar.style.width = '0%';
+
+            // Update stats
+            updateStats();
         }
 
         fileInput.addEventListener('change', function(e) {
